@@ -16,25 +16,29 @@ export const board_list = createAction(BOARD_LIST);
 
 export const firebase_board_list = () =>{
     return (dispatch) => {
-        return firestore.collection('boards').orderBy("brddate", "desc").get()
-                    .then((snapshot) => {
-                        var rows = [];
-                        snapshot.forEach((doc) => {
-                            var childData = doc.data();
+		return firestore.collection("boards").orderBy("brddate", "desc")
+				.onSnapshot(function(snapshot) {
+					snapshot.docChanges().forEach(function(change) {
+                        var childData = change.doc.data();
+						if (change.type === "added") {
                             childData.brddate = dateFormat(childData.brddate, "yyyy-mm-dd");
-                            rows.push(childData);
-                        });
-                        dispatch(board_list(rows));
-                    });    
+							dispatch(board_save(childData));
+						} else
+						if (change.type === "modified") {
+							dispatch(board_save(childData));
+						} else
+						if (change.type === "removed") {
+							dispatch(board_remove(childData.brdno));
+						}
+							
+					});
+				});
     }
 }
 
 export const firebase_board_remove = ( brdno = {}) => {
     return (dispatch) => {
-        console.log(brdno);
-        return firestore.collection('boards').doc(brdno).delete().then(() => {
-            dispatch(board_remove(brdno));
-        })
+        return firestore.collection('boards').doc(brdno).delete();
     }
 };
 
@@ -44,14 +48,9 @@ export const firebase_board_save = ( data = {}) => {
             var doc = firestore.collection('boards').doc();
             data.brdno = doc.id;
             data.brddate = Date.now();
-            return doc.set(data).then(() => {
-                data.brddate = dateFormat(data.brddate, "yyyy-mm-dd");
-                dispatch(board_save(data));
-            })
+            return doc.set(data);
         } else {
-            return firestore.collection('boards').doc(data.brdno).update(data).then(() => {
-                dispatch(board_save(data));
-            })            
+            return firestore.collection('boards').doc(data.brdno).update(data);    
         }
     }
 };
