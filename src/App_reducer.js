@@ -16,23 +16,23 @@ export const board_list = createAction(BOARD_LIST);
 
 export const firebase_board_list = () =>{
     return (dispatch) => {
-		return firestore.collection("boards").orderBy("brddate", "desc")
-				.onSnapshot(function(snapshot) {
-					snapshot.docChanges().forEach(function(change) {
+        return firestore.collection("boards").orderBy("brddate", "desc")
+                .onSnapshot(function(snapshot) {
+                    snapshot.docChanges().forEach(function(change) {
                         var childData = change.doc.data();
-						if (change.type === "added") {
+                        if (change.type === "added") {
                             childData.brddate = dateFormat(childData.brddate, "yyyy-mm-dd");
-							dispatch(board_save(childData));
-						} else
-						if (change.type === "modified") {
-							dispatch(board_save(childData));
-						} else
-						if (change.type === "removed") {
-							dispatch(board_remove(childData.brdno));
-						}
-							
-					});
-				});
+                            dispatch(board_save(childData));
+                        } else
+                        if (change.type === "modified") {
+                            dispatch(board_save(childData));
+                        } else
+                        if (change.type === "removed") {
+                            dispatch(board_remove(childData.brdno));
+                        }
+                            
+                    });
+                });
     }
 }
 
