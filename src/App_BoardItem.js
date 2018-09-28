@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import { board_read, firebase_board_remove } from './App_reducer'
 
 const BoardItem = ({row, inx, board_read, firebase_board_remove}) => (
-	<tr>
-		<td>{inx}</td>
-		<td><a onClick={() => { board_read(row.brdno) } }>{row.brdtitle}</a></td>
-		<td>{row.brdwriter}</td>
-		<td>{row.brddate}</td>
-		<td><a onClick={() => { firebase_board_remove(row.brdno) }}>X</a></td>
-	</tr>
+    <tr>
+        <td>{inx}</td>
+        <td><a onClick={() => { board_read(row.brdno) } }>{row.brdtitle}</a></td>
+        <td>{row.brdwriter}</td>
+        <td>{row.brddate}</td>
+        <td><a onClick={() => { firebase_board_remove(row.brdno) }}>X</a></td>
+    </tr>
 );
 
 const mapDispatchToProps = dispatch => ({
