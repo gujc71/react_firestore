@@ -17,4 +17,5 @@ This example is web boards focusing on data input / output for easy understandin
 ### Install & Run ###
 - git clone https://github.com/gujc71/react_firestore.git
 - npm install
+- set config for [firebase](https://firebase.google.com/docs/web/setup?authuser=0) in Firestore.js
 - npm start    
