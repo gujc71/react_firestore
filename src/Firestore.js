@@ -1,6 +1,7 @@
 import firebase from 'firebase';
 
 var config = {
+
 };
 firebase.initializeApp(config);
 var firestore = firebase.firestore();
